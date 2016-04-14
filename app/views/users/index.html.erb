@@ -1,0 +1,57 @@
+<div id="FizzDiv" style="display: none;color: #730E15">FIZZ!</div>
+<div id="BuzzDiv" style="display: none;color: #730E15">BUZZ!</div>
+<div id="errorfavourites" style="display: none;color: green">favourites!</div>
+<div id="errorDiv" style="display: none;color: orangered">An error has occured!</div>
+<div id="results">
+  <%
+     content=''
+     content_size = 25
+     @array.each_with_index do |number, index|
+       content += '<p></p>' if index % content_size == 0
+       if @numbers.include?(number.to_i)
+         content += '<a id="link_'+"#{number}"+ '" style="color: gray;text-decoration:none">' + number + '</a><span>&nbsp;</span>'
+       else
+         content += '<a id="link_'+"#{number}"+ '" href="javascript:update(' + "#{@user.id}" +',' + "#{number}" +');" style="color: red;">' + number + '</a><span>&nbsp;</span>'
+       end
+     end
+  %>
+  <%= content.html_safe %>
+</div>
+<div>
+  <p></p>
+  <%= will_paginate @array %>
+</div>
+
+<script type="text/javascript">
+    function update(id, number) {
+        $.ajax({
+            type: "PUT",
+            url: "/users/" + id,
+            data: {number: number},
+            success: function(){
+                $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href');
+                if (number % 3 == 0)  {
+                    $("#FizzDiv").show().delay(2000).queue(function(n) {
+                        $(this).fadeOut('slow'); n();
+                    });
+                }
+                if  (number % 5 == 0) {
+                    $("#BuzzDiv").show().delay(2000).queue(function(n) {
+                        $(this).fadeOut('slow'); n();
+                    });
+                }
+            },
+            error: function(){
+                $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href');
+
+                $("#errorDiv").show().delay(2000).queue(function(n) {
+                    $(this).fadeOut('slow'); n();
+                });
+
+            }
+        });
+
+
+    }
+</script>
+
