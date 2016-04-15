@@ -5,8 +5,9 @@ class UsersController < ApplicationController
 
     @numbers = @user.numbers.pluck(:value)
     @per_page = params[:page].nil? || params[:page] == "1" ? 100 : 1000
-    x = 1; y=50000
-    @array = (x.to_s..y.to_s).to_a.paginate(:page => params[:page], :per_page => 100)
+    @page_links = params[:page].nil? || params[:page] == "1" ? false : true
+    x = 1; y = 10000
+    @array = (x.to_s..y.to_s).to_a.paginate(:page => params[:page], :per_page => @per_page)
 
 
     respond_to do |format|
