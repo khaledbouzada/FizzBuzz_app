@@ -3,10 +3,16 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 /* inner container positioned absolutely and holds content */
 
-.FizzDiv, .BuzzDiv, .Favourites, .errorMessage {
+.FizzDiv, .BuzzDiv, .errorMessage {
   display: none;
-  color: #b60715;
+  color: #b1001b;
+  font-family:Tahoma,Geneva,Arial,sans-serif;
+  font-size:17px;
+  padding:5px 6px;
+  text-align: center;
 }
+
+
 
 .container {
   margin: auto;

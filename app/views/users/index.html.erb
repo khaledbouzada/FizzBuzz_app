@@ -5,12 +5,14 @@
   <%= will_paginate @array,  :page_links => @page_links, :container => false %>
 </div>
 
-<div class="FizzDiv">FIZZ!</div>
-<div class="BuzzDiv">BUZZ!</div>
-<div class="Favourites">favourites!</div>
-<div class="errorMessage">An error has occured!</div>
+
+
 <div class="container">
   <div class="outer r4x3">
+    <div class="FizzDiv">FIZZ!</div>
+    <div class="BuzzDiv">BUZZ!</div>
+
+    <div class="errorMessage">An error has occured!</div>
     <div class="inner">
       <%
          content=''
@@ -41,18 +43,17 @@
             url: "/users/" + id,
             data: {number: number},
             success: function () {
-                alert('#link_' + number + '');
-                $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href');
+                $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href').attr('title', 'favourite!');
                 if (number % 3 == 0) {
                     $(".FizzDiv").show().delay(2000).queue(function (n) {
                         $(this).fadeOut('slow');
-                        n();
+                        $(this).remove();
                     });
                 }
                 if (number % 5 == 0) {
                     $(".BuzzDiv").show().delay(2000).queue(function (n) {
                         $(this).fadeOut('slow');
-                        n();
+                        $(this).remove();
                     });
                 }
             },
@@ -61,7 +62,7 @@
 
                 $("#.errorMessage").show().delay(2000).queue(function (n) {
                     $(this).fadeOut('slow');
-                    n();
+                    $(this).remove();
                 });
 
             }
