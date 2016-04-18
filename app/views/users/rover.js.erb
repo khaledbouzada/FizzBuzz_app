@@ -1,0 +1,2 @@
+$('#page').html("<%= escape_javascript( render(:partial => 'paginate', :array => @array) ) %>");
+$('.inner').html("<%= escape_javascript( render(:partial => 'numbers', :array => @array) ) %>");

@@ -1,0 +1,16 @@
+
+  <%
+     content=''
+     content_size = 25
+     @array.each_with_index do |number, index|
+       content += '<p></p>' if index % content_size == 0
+       if @numbers.include?(number.to_i)
+         content += '<a class="numberCircle" id="link_'+"#{number}"+ '" style="color: gray;text-decoration:none">' + number + '</a><span>&nbsp;</span>'
+       else
+         content += '<a class="numberCircle" id="link_'+"#{number}"+ '" href="javascript:update(' + "#{@user.id}" +',' + "#{number}" +');" style="color: #b60715;">' + number + '</a><span>&nbsp;</span>'
+       end
+     end
+  %>
+  <%= content.html_safe %>
+
+
