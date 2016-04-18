@@ -1,112 +1,92 @@
-<div id="page"><%= render partial: "paginate" %></div>
-
-
-<!--&lt;!&ndash;<style type="text/css">&ndash;&gt;-->
-    <!--/*.container{*/-->
-        <!--/*float: left;*/-->
-        <!--/*background: #f2f2f2;*/-->
-        <!--/*border: 1px solid #ccc;*/-->
-    <!--/*}*/-->
-    <!--/*.inner p{*/-->
-        <!--/*margin: 0;*/-->
-        <!--/*padding-top: 20px;*/-->
-    <!--/*}*/-->
-    <!--/*.inner p:first-child{*/-->
-        <!--/*padding-top: 0;*/-->
-    <!--/*}*/-->
-<!--&lt;!&ndash;</style>&ndash;&gt;-->
-
-<!--<div class="changeSize">-->
-  <!--<br>-->
-  <!--<form>-->
-    <!--<input type="text" class="input-width">-->
-    <!--<button type="button" class="set-width-btn">Set Width</button>-->
-    <!--<br>-->
-    <!--<input type="text" class="input-height">-->
-    <!--<button type="button" class="set-height-btn">Set Height</button>-->
-    <!--<p>Enter the value in input box either as number (e.g. 100, 200) or combination of number and unit (e.g. 100%, 200px, 50em, auto) and click the "Set Width or Set Height" button.</p>-->
-  <!--</form>-->
-<!--</div>-->
+<div id="page">
+  <%= render partial: "paginate" %>
+</div>
 
 <div class="changePageSize">
   <br>
   <form>
     <input type="text" class="input-page-size">
-    <button type="button" class="set-pageSize-btn">Set Page Size</button>
- </form>
+    <button type="button" class="pageSize-btn">Set Page Size</button>
+    <button type="button" class="reset-btn">Reset</button>
+  </form>
+</div>
+<div id="pageSizeEmpty"></div>
+<div class="spinner">
+  <div class="sk-fading-circle">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
+  </div>
 </div>
 
 <div class="container">
   <div class="outer r4x3">
-
-    <%= render partial: "messages" %>
     <div class="inner">
-    <%= render partial: "numbers" %>
+      <%= render partial: "numbers" %>
     </div>
+    <%= render partial: "messages" %>
   </div>
 </div>
 
-
-
-
-<!--&lt;!&ndash;<script type="text/javascript">&ndash;&gt;-->
-<!--//    $(document).ready(function(){-->
-<!--//        $(".set-width-btn").click(function(){-->
-<!--//            var newWidth = $(".input-width").val();-->
-<!--//            //$(".container").width(newWidth);-->
-<!--//            $(".container").animate({-->
-<!--//                width: newWidth,-->
-<!--//            }, 500);-->
-<!--//        });-->
-<!--//        $(".set-height-btn").click(function(){-->
-<!--//            var newHeight = $(".input-height").val();-->
-<!--//           // $(".container").height(newHeight);-->
-<!--//            $(".container").animate({-->
-<!--//                height: newHeight,-->
-<!--//            }, 500);-->
-<!--//        });-->
-<!--//    });-->
-<!--&lt;!&ndash;</script>&ndash;&gt;-->
-
 <script type="text/javascript">
-    $(document).ready(function(){
-        $(".set-pageSize-btn").click(function(){
-
+    $(document).ready(function () {
+        $(".spinner").hide();
+        $(".pageSize-btn").click(function () {
             var size = $(".input-page-size").val();
-
+            if(size.length === 0) {
+                $('#pageSizeEmpty').text("A value is required");
+                $('#pageSizeEmpty').show().delay(1000).queue(function () {
+                    $(this).fadeOut('slow');
+                    $(this).remove();
+                    $('.pageSize-btn').removeAttr('disabled');
+                });
+                return false;
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "/users/" + <%= @user.id %> +"/index",
+                    data: {page: <%= @page %>, per_page: size},
+                    beforeSend: function(){
+                        $(".spinner").show();
+                    },
+                    success: function () {
+                        $(".spinner").hide();
+                    },
+                    error: function () {
+                        $(".spinner").hide();
+                    }
+                });
+            }
+        });
+        $(".reset-btn").click(function () {
+            var size = $(".input-page-size").val();
             $.ajax({
                 type: "POST",
-                url: "/users/" + <%= @user.id %> + "/index",
-                data: {page: <%= @page %>, per_page: size},
-                success: function() {
-
-
+                url: "/users/" + <%= @user.id %> +"/index",
+                data: {page: <%= @page %>, per_page: 100},
+                beforeSend: function(){
+                    $(".spinner").show();
                 },
-                error: function() {
-
-
+                success: function () {
+                    $(".spinner").hide();
+                    $(".input-page-size").val('');
+                },
+                error: function () {
+                    $(".spinner").hide();
                 }
             });
-
-//            $.ajax({
-//                type: "GET",
-//                url: "/users/",
-//                data: {page: <%= @page %>, per_page: size},
-//                success: function() {
-//                    alert("About to reload page :" + <%= @array.size %>)
-//                    window.location.reload(true);
-//                }
-//            });
-
-
-
         });
-
     });
-</script>
 
-
-<script type="text/javascript">
     function update(id, number) {
         $.ajax({
             type: "PUT",
@@ -129,12 +109,10 @@
             },
             error: function () {
                 $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href');
-
                 $("#.errorMessage").show().delay(1000).queue(function () {
                     $(this).fadeOut('slow');
                     $(this).remove();
                 });
-
             }
         });
     }

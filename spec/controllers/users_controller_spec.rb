@@ -5,6 +5,14 @@ RSpec.describe UsersController, :type => :controller do
   before { @user = create(:user)}
 
   describe "GET index" do
+    before {
+      Rails.cache.clear
+      Rails.cache.fetch 'huge-array' do
+        huge_array = ('1'..'1000').to_a
+        huge_array
+      end
+    }
+
     it "should render success and assign instance variables" do
       get :index
       expect(response).to have_http_status(:success)
@@ -38,6 +46,7 @@ RSpec.describe UsersController, :type => :controller do
 
   context "JSON" do
     before {  request.accept = "application/json" }
+
     describe "PUT update" do
       it "should create number and render success" do
         put :update, :id => @user.id.to_s + '.json', :number => 88
@@ -52,7 +61,7 @@ RSpec.describe UsersController, :type => :controller do
         expect(response).to have_http_status(:success)
         assigns(:per_page).should == 100
         assigns(:array).size.should == 100
-        expect(JSON.parse(response.body)['last_name']).to eq("Jane Doe")
+        expect(JSON.parse(response.body)['last_name']).to eq(@user.last_name)
       end
     end
   end
