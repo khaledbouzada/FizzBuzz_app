@@ -1,39 +1,109 @@
+<div id="page"><%= render partial: "paginate" %></div>
 
 
-<br>
-<div class="Pagination">
-  <%= will_paginate @array,  :page_links => @page_links, :container => false %>
+<!--&lt;!&ndash;<style type="text/css">&ndash;&gt;-->
+    <!--/*.container{*/-->
+        <!--/*float: left;*/-->
+        <!--/*background: #f2f2f2;*/-->
+        <!--/*border: 1px solid #ccc;*/-->
+    <!--/*}*/-->
+    <!--/*.inner p{*/-->
+        <!--/*margin: 0;*/-->
+        <!--/*padding-top: 20px;*/-->
+    <!--/*}*/-->
+    <!--/*.inner p:first-child{*/-->
+        <!--/*padding-top: 0;*/-->
+    <!--/*}*/-->
+<!--&lt;!&ndash;</style>&ndash;&gt;-->
+
+<!--<div class="changeSize">-->
+  <!--<br>-->
+  <!--<form>-->
+    <!--<input type="text" class="input-width">-->
+    <!--<button type="button" class="set-width-btn">Set Width</button>-->
+    <!--<br>-->
+    <!--<input type="text" class="input-height">-->
+    <!--<button type="button" class="set-height-btn">Set Height</button>-->
+    <!--<p>Enter the value in input box either as number (e.g. 100, 200) or combination of number and unit (e.g. 100%, 200px, 50em, auto) and click the "Set Width or Set Height" button.</p>-->
+  <!--</form>-->
+<!--</div>-->
+
+<div class="changePageSize">
+  <br>
+  <form>
+    <input type="text" class="input-page-size">
+    <button type="button" class="set-pageSize-btn">Set Page Size</button>
+ </form>
 </div>
-
-
 
 <div class="container">
   <div class="outer r4x3">
-    <div class="FizzDiv">FIZZ!</div>
-    <div class="BuzzDiv">BUZZ!</div>
 
-    <div class="errorMessage">An error has occured!</div>
+    <%= render partial: "messages" %>
     <div class="inner">
-      <%
-         content=''
-         content_size = 25
-         @array.each_with_index do |number, index|
-           content += '<p></p>' if index % content_size == 0
-           if @numbers.include?(number.to_i)
-             content += '<a class="numberCircle" id="link_'+"#{number}"+ '" style="color: gray;text-decoration:none">' + number + '</a><span>&nbsp;</span>'
-           else
-             content += '<a class="numberCircle" id="link_'+"#{number}"+ '" href="javascript:update(' + "#{@user.id}" +',' + "#{number}" +');" style="color: #b60715;">' + number + '</a><span>&nbsp;</span>'
-           end
-         end
-      %>
-      <%= content.html_safe %>
+    <%= render partial: "numbers" %>
     </div>
   </div>
 </div>
-<br>
-<div class="Pagination">
-  <%= will_paginate @array,  :page_links => @page_links, :container => false %>
-</div>
+
+
+
+
+<!--&lt;!&ndash;<script type="text/javascript">&ndash;&gt;-->
+<!--//    $(document).ready(function(){-->
+<!--//        $(".set-width-btn").click(function(){-->
+<!--//            var newWidth = $(".input-width").val();-->
+<!--//            //$(".container").width(newWidth);-->
+<!--//            $(".container").animate({-->
+<!--//                width: newWidth,-->
+<!--//            }, 500);-->
+<!--//        });-->
+<!--//        $(".set-height-btn").click(function(){-->
+<!--//            var newHeight = $(".input-height").val();-->
+<!--//           // $(".container").height(newHeight);-->
+<!--//            $(".container").animate({-->
+<!--//                height: newHeight,-->
+<!--//            }, 500);-->
+<!--//        });-->
+<!--//    });-->
+<!--&lt;!&ndash;</script>&ndash;&gt;-->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".set-pageSize-btn").click(function(){
+
+            var size = $(".input-page-size").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/users/" + <%= @user.id %> + "/index",
+                data: {page: <%= @page %>, per_page: size},
+                success: function() {
+
+
+                },
+                error: function() {
+
+
+                }
+            });
+
+//            $.ajax({
+//                type: "GET",
+//                url: "/users/",
+//                data: {page: <%= @page %>, per_page: size},
+//                success: function() {
+//                    alert("About to reload page :" + <%= @array.size %>)
+//                    window.location.reload(true);
+//                }
+//            });
+
+
+
+        });
+
+    });
+</script>
 
 
 <script type="text/javascript">
@@ -45,13 +115,13 @@
             success: function () {
                 $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href').attr('title', 'favourite!');
                 if (number % 3 == 0) {
-                    $(".FizzDiv").show().delay(2000).queue(function (n) {
+                    $(".FizzDiv").show().delay(1000).queue(function () {
                         $(this).fadeOut('slow');
                         $(this).remove();
                     });
                 }
                 if (number % 5 == 0) {
-                    $(".BuzzDiv").show().delay(2000).queue(function (n) {
+                    $(".BuzzDiv").show().delay(1000).queue(function () {
                         $(this).fadeOut('slow');
                         $(this).remove();
                     });
@@ -60,15 +130,13 @@
             error: function () {
                 $('#link_' + number + '').css("color", "gray").css("text-decoration", "none").removeAttr('href');
 
-                $("#.errorMessage").show().delay(2000).queue(function (n) {
+                $("#.errorMessage").show().delay(1000).queue(function () {
                     $(this).fadeOut('slow');
                     $(this).remove();
                 });
 
             }
         });
-
-
     }
 </script>
 

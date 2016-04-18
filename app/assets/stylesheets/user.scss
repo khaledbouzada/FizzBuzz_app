@@ -6,19 +6,23 @@
 .FizzDiv, .BuzzDiv, .errorMessage {
   display: none;
   color: #b1001b;
-  font-family:Tahoma,Geneva,Arial,sans-serif;
-  font-size:17px;
-  padding:5px 6px;
+  font-family: Tahoma, Geneva, Arial, sans-serif;
+  font-size: 17px;
+  padding: 5px 6px;
   text-align: center;
 }
 
-
-
 .container {
-  margin: auto;
+  max-width: 1300px;
+  // border: dashed 1px #000000;
+  // float: left;
+  // cursor: w-resize;
+  // display: block;
+
 }
 
 .outer.r4x3 {
+
   padding-right: 100%;
 }
 
@@ -56,7 +60,7 @@
 
 .numberCircle.Fav {
   color: gray;
-  text-decoration:none;
+  text-decoration: none;
 }
 
 .Pagination {
@@ -213,3 +217,13 @@
 .flickr_pagination.next_page {
   margin-left: 1em;
 }
+
+.set-pageSize-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  border: 2px solid #666;
+  text-align: center;
+  color: #b60715;
+  font: 15px Arial, sans-serif;
+}
+

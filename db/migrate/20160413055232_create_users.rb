@@ -4,6 +4,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string      :last_name
       t.string      :first_name
     end
-    User.create(last_name: 'bob', first_name: 'hope')
+    #User.create(last_name: 'hope', first_name: 'bob')
   end
 end
